@@ -8,7 +8,6 @@ stable experiment for manual testing.
 from __future__ import annotations
 
 from sqlalchemy import select
-
 from traintrack.db import get_session, init_db
 from traintrack.models.experiment import Experiment
 from traintrack.services.auth import create_api_key

@@ -78,7 +78,20 @@ def submit_run():
                 409,
                 "idempotency_conflict",
             ) from None
-        return jsonify(run_to_dict(existing, position=queue_position(session, existing))), 200
+        enqueued = existing.status is RunStatus.QUEUED and _enqueue(
+            existing.id, max(1, existing.attempt_count + 1)
+        )
+        return (
+            jsonify(
+                {
+                    **run_to_dict(
+                        existing, position=queue_position(session, existing)
+                    ),
+                    "enqueued": enqueued,
+                }
+            ),
+            200,
+        )
 
     experiment = session.get(Experiment, payload.experiment_id)
     if experiment is None:
@@ -135,7 +148,28 @@ def submit_run():
         return jsonify(run_to_dict(existing)), 200
 
     logger.info("submitted run %s (%s)", run.id, payload.job_kind)
-    return jsonify(run_to_dict(run, position=queue_position(session, run))), 201
+    enqueued = _enqueue(run.id)
+    return (
+        jsonify(
+            {
+                **run_to_dict(run, position=queue_position(session, run)),
+                "enqueued": enqueued,
+            }
+        ),
+        201,
+    )
+
+
+def _enqueue(run_id: uuid.UUID, attempt: int = 1) -> bool:
+    """Best-effort publish; the durable QUEUED row is retried idempotently."""
+    try:
+        from traintrack.broker.publisher import get_publisher
+
+        get_publisher().publish(run_id, attempt)
+        return True
+    except Exception:
+        logger.warning("could not publish run %s to RabbitMQ", run_id, exc_info=True)
+        return False
 
 
 @bp.get("")

@@ -24,6 +24,13 @@ os.environ["TRAINTRACK_RATE_LIMIT"] = "100000"
 
 from sqlalchemy import create_engine, text  # noqa: E402
 from traintrack.api.app import create_app  # noqa: E402
+from traintrack.broker.publisher import reset_publisher  # noqa: E402
+from traintrack.broker.topology import (  # noqa: E402
+    RUNS_DEAD,
+    RUNS_RETRY,
+    RUNS_SUBMITTED,
+    declare_topology,
+)
 from traintrack.config import reset_settings_cache  # noqa: E402
 from traintrack.db import dispose_engine, get_session, init_db  # noqa: E402
 from traintrack.models import Base  # noqa: E402
@@ -64,14 +71,35 @@ def clean_state() -> Iterator[None]:
     """Truncate all tables and flush the test Redis DB between tests."""
     from traintrack.db import get_engine
 
-    yield
     with get_engine().begin() as connection:
         tables = ", ".join(
             f'"{table.name}"' for table in reversed(Base.metadata.sorted_tables)
         )
         connection.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
     reset_redis_client()
+    reset_publisher()
     get_redis().flushdb()
+    _purge_queues()
+    yield
+    reset_publisher()
+
+
+def _purge_queues() -> None:
+    """Remove any messages left by an earlier test."""
+    try:
+        from traintrack.broker.publisher import connect
+
+        connection = connect(timeout=3)
+    except Exception:
+        return
+    try:
+        channel = connection.channel()
+        declare_topology(channel)
+        for queue in (RUNS_SUBMITTED, RUNS_RETRY, RUNS_DEAD):
+            channel.queue_purge(queue=queue)
+    finally:
+        if connection.is_open:
+            connection.close()
 
 
 @pytest.fixture()
