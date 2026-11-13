@@ -207,12 +207,12 @@ def run_configuration(
     timeout: float,
 ) -> dict[str, Any]:
     purge_queues()
-    processes = start_workers(workers)
     snapshot = api.get("/api/snapshots")["snapshots"]
     snapshot_id = snapshot[0]["id"] if snapshot else None
     run_ids: list[str] = []
     latencies: list[float] = []
     token = uuid.uuid4().hex[:8]
+    processes: list[subprocess.Popen] = []
 
     def submit(index: int) -> tuple[int, dict[str, Any], float]:
         return api.post(
@@ -238,6 +238,10 @@ def run_configuration(
             run_ids.append(body["id"])
             latencies.append(elapsed)
 
+        # Queue the runs first, then start workers and measure how long they
+        # take to drain the backlog.
+        processes = start_workers(workers)
+        drain_started = time.monotonic()
         deadline = time.monotonic() + timeout
         states: dict[str, dict[str, Any]] = {}
         while time.monotonic() < deadline:
@@ -254,8 +258,9 @@ def run_configuration(
             if len(states) == runs and all(
                 run["status"] in TERMINAL for run in states.values()
             ):
+                drain_seconds_measured = time.monotonic() - drain_started
                 break
-            time.sleep(0.5)
+            time.sleep(0.2)
         else:
             raise TimeoutError("benchmark runs did not drain before timeout")
 
@@ -267,7 +272,7 @@ def run_configuration(
         created = [
             datetime.fromisoformat(run["created_at"]) for run in states.values()
         ]
-        drain_seconds = (
+        end_to_end_seconds = (
             (max(finished) - min(created)).total_seconds()
             if finished and created
             else None
@@ -283,9 +288,10 @@ def run_configuration(
             "submit_seconds": round(submit_seconds, 3),
             "submission_throughput_rps": round(runs / submit_seconds, 3),
             "submission_latency_ms": percentiles(latencies),
-            "drain_seconds": round(drain_seconds, 3) if drain_seconds else None,
-            "drain_throughput_rps": round(runs / drain_seconds, 3)
-            if drain_seconds
+            "drain_seconds": round(drain_seconds_measured, 3),
+            "drain_throughput_rps": round(runs / drain_seconds_measured, 3),
+            "end_to_end_seconds": round(end_to_end_seconds, 3)
+            if end_to_end_seconds
             else None,
             "statuses": statuses,
             "all_succeeded": all_succeeded,
@@ -361,8 +367,10 @@ def main(argv: list[str] | None = None) -> int:
         "broker_publish_confirm_ms": publish_confirm,
         "configurations": configurations,
         "notes": (
+            "No-op runs are queued first; 1/2/4 workers then drain the backlog. "
             "No-op jobs isolate API, broker-confirm, and scheduler overhead; "
-            "training time is measured separately in training_runs.json."
+            "training time is measured separately in training_runs.json. "
+            "Throughput is wall-clock and therefore sensitive to concurrent host load."
         ),
     }
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)

@@ -64,7 +64,7 @@ def run_backend() -> dict[str, Any]:
     return {
         **totals,
         "coverage_percent": coverage_percent,
-        "coverage_scope": "traintrack/ (training entry points and k8s executor excluded)",
+        "coverage_scope": "traintrack/ (training entry points, preprocess, and k8s executor excluded)",
         "command": " ".join(command[1:]),
     }
 

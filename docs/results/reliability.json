@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-11-13T09:56:18.609341+00:00",
+  "generated_by": "scripts/export_reliability.py",
+  "run_id": "d0ed1d36-e53a-433e-9cd5-52153815e005",
+  "experiment_id": "4f5ae0f6-1a8b-42b7-abdc-9bc13674fb22",
+  "executor": "local",
+  "status": "FAILED",
+  "attempts_configured": 2,
+  "attempts_observed": 2,
+  "failure_reason": "process exited with 2",
+  "dlq_messages": 1,
+  "retry_transitions": 1,
+  "observed_retry_delay_seconds": 2.071,
+  "timeline": [
+    {
+      "from": null,
+      "to": "QUEUED",
+      "reason": "submitted",
+      "at": "2026-11-13T02:42:58.262295+00:00"
+    },
+    {
+      "from": "QUEUED",
+      "to": "SCHEDULED",
+      "reason": "claimed by Abhirams-MacBook-Air.local-90801-eb9a14",
+      "at": "2026-11-13T09:56:04.485463+00:00"
+    },
+    {
+      "from": "SCHEDULED",
+      "to": "RUNNING",
+      "reason": "executor local",
+      "at": "2026-11-13T09:56:04.590460+00:00"
+    },
+    {
+      "from": "RUNNING",
+      "to": "FAILED",
+      "reason": "process exited with 2",
+      "at": "2026-11-13T09:56:09.969217+00:00"
+    },
+    {
+      "from": "FAILED",
+      "to": "QUEUED",
+      "reason": "retry 1/2: process exited with 2",
+      "at": "2026-11-13T09:56:09.975419+00:00"
+    },
+    {
+      "from": "QUEUED",
+      "to": "SCHEDULED",
+      "reason": "claimed by Abhirams-MacBook-Air.local-90801-eb9a14",
+      "at": "2026-11-13T09:56:12.046178+00:00"
+    },
+    {
+      "from": "SCHEDULED",
+      "to": "RUNNING",
+      "reason": "executor local",
+      "at": "2026-11-13T09:56:12.066507+00:00"
+    },
+    {
+      "from": "RUNNING",
+      "to": "FAILED",
+      "reason": "process exited with 2",
+      "at": "2026-11-13T09:56:15.985864+00:00"
+    }
+  ],
+  "total_seconds": 14.126
+}

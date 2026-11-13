@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-13T09:55:00.019043+00:00",
+  "generated_at": "2026-11-13T10:08:04.103948+00:00",
   "generated_by": "scripts/export_test_results.py",
   "backend": {
     "tests": 86,
     "passed": 86,
     "failed": 0,
     "skipped": 0,
-    "duration_seconds": 71.315,
+    "duration_seconds": 160.578,
     "coverage_percent": 85.81,
-    "coverage_scope": "traintrack/ (training entry points and k8s executor excluded)",
+    "coverage_scope": "traintrack/ (training entry points, preprocess, and k8s executor excluded)",
     "command": "-m pytest -q --cov=traintrack --cov-report=json:/Users/abhiramkasireddi/TrainTrack/docs/results/coverage.json --cov-fail-under=80 --junitxml=/Users/abhiramkasireddi/TrainTrack/docs/results/junit.xml"
   },
   "frontend": {
@@ -16,7 +16,7 @@
     "passed": 21,
     "failed": 0,
     "suites": 15,
-    "duration_seconds": 3.762,
+    "duration_seconds": 3.202,
     "command": "npm test"
   },
   "totals": {

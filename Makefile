@@ -63,5 +63,9 @@ train:  ## Run a local training job against the configured snapshot
 bench:  ## Run the submission/throughput benchmark
 	$(PYTHON) scripts/bench_submit.py
 
-results:  ## Regenerate docs/results/*.json from the live registry
+results:  ## Regenerate docs/results/*.json and the README results section
 	$(PYTHON) scripts/export_results.py
+	$(PYTHON) scripts/export_reliability.py
+	$(PYTHON) scripts/export_test_results.py
+	-$(PYTHON) scripts/export_k8s_results.py
+	$(PYTHON) scripts/update_readme_results.py
