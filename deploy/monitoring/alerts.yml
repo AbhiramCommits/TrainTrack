@@ -1,0 +1,37 @@
+groups:
+  - name: traintrack
+    rules:
+      - alert: TrainTrackQueueDepthHigh
+        expr: traintrack_queue_depth > 20
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "TrainTrack queue depth is high"
+          description: "{{ $value }} runs are queued for more than 2 minutes."
+
+      - alert: TrainTrackDLQNotEmpty
+        expr: traintrack_dlq_messages > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "TrainTrack dead-letter queue is not empty"
+          description: "{{ $value }} messages are in runs.dead and need investigation."
+
+      - alert: TrainTrackNoRecentCompletion
+        expr: increase(traintrack_runs_total{status="SUCCEEDED"}[30m]) == 0
+        for: 30m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No TrainTrack run completed in 30 minutes"
+          description: "No successful run has finished in the last 30 minutes."
+
+      - alert: TrainTrackAPIDown
+        expr: up{job="traintrack-api"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "TrainTrack API is not scrapeable"
