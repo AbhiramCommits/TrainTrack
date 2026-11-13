@@ -380,6 +380,26 @@ def test_unknown_route_returns_json_404(client) -> None:
     assert response.is_json
 
 
+def test_per_key_rate_limit(client, app) -> None:
+    from traintrack.db import get_session
+    from traintrack.services.auth import create_api_key
+
+    session = get_session()
+    try:
+        record, raw = create_api_key(session, "limited", rate_limit_per_min=1)
+        session.commit()
+    finally:
+        session.close()
+
+    headers = {"X-API-Key": raw}
+    first = client.get("/api/runs", headers=headers)
+    assert first.status_code == 200
+    second = client.get("/api/runs", headers=headers)
+    assert second.status_code == 429
+    assert second.headers["Retry-After"]
+    assert second.get_json()["error"] == "rate_limited"
+
+
 def test_queued_run_timestamps(client, auth_headers, experiment, idempotency_headers) -> None:
     snapshot = _snapshot(client, auth_headers)
     run = client.post(

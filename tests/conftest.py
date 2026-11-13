@@ -19,6 +19,8 @@ os.environ["DATABASE_URL"] = TEST_DATABASE_URL
 os.environ["REDIS_URL"] = TEST_REDIS_URL
 os.environ["TRAINTRACK_API_URL"] = "http://localhost:8010"
 os.environ["TRAINTRACK_ARTIFACT_ROOT"] = "/tmp/traintrack-test-artifacts"
+# Isolate test queues from any worker running against the dev database.
+os.environ["TRAINTRACK_QUEUE_PREFIX"] = f"test-{os.getpid()}-"
 # Keep the rate limiter generous in tests; dedicated tests override per-key limits.
 os.environ["TRAINTRACK_RATE_LIMIT"] = "100000"
 

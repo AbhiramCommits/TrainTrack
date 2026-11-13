@@ -1,0 +1,107 @@
+{
+  "generated_at": "2026-11-13T08:31:26.390691+00:00",
+  "generated_by": "scripts/run_experiments.py",
+  "git_sha": "ac7c435",
+  "experiment": {
+    "created_at": "2026-11-13T08:28:37.121173+00:00",
+    "description": "MNIST CNN lr/batch-size sweep",
+    "id": "e9b6af44-be65-4ba9-be8a-6228f98512cb",
+    "name": "mnist-sweep-v1"
+  },
+  "snapshot": {
+    "id": "81e5788c-8d25-4903-96d5-1fd0287f5f6f",
+    "version": "mnist-v1",
+    "content_hash": "ec15555b070325cf62402d2c117c7327532b6c597a2bdf14251a28865250b2cb",
+    "row_count": 70000
+  },
+  "runs": [
+    {
+      "run_id": "302871cc-7a06-4086-a1cc-d15f76ce0085",
+      "slug": "adam-lr001-b64",
+      "hyperparams": {
+        "lr": 0.001,
+        "batch_size": 64,
+        "epochs": 2,
+        "optimizer": "adam",
+        "dropout": 0.0,
+        "seed": 42
+      },
+      "best_val_accuracy": 0.983,
+      "checkpoint_sha": "27e24a99ad6516ec4b7ab67cdca8183cd0cc62c22967d9d9c44ad47396c3ac3f",
+      "started_at": "2026-11-13T08:28:37.217562+00:00",
+      "finished_at": "2026-11-13T08:29:17.920206+00:00",
+      "duration_seconds": 40.703
+    },
+    {
+      "run_id": "483e480d-e317-44c1-bb4c-ece457903a12",
+      "slug": "adam-lr0005-b128",
+      "hyperparams": {
+        "lr": 0.0005,
+        "batch_size": 128,
+        "epochs": 2,
+        "optimizer": "adam",
+        "dropout": 0.1,
+        "seed": 43
+      },
+      "best_val_accuracy": 0.977,
+      "checkpoint_sha": "91c8b8260b4aeb532eb623915336b8aed212ac8442a1381dbd3840a195908ca8",
+      "started_at": "2026-11-13T08:29:17.937110+00:00",
+      "finished_at": "2026-11-13T08:29:42.953629+00:00",
+      "duration_seconds": 25.017
+    },
+    {
+      "run_id": "fc1e38b9-e74a-4963-affe-73df083351be",
+      "slug": "adam-lr002-b256",
+      "hyperparams": {
+        "lr": 0.002,
+        "batch_size": 256,
+        "epochs": 2,
+        "optimizer": "adam",
+        "dropout": 0.0,
+        "seed": 44
+      },
+      "best_val_accuracy": 0.982333,
+      "checkpoint_sha": "50cbd05ef7a7e33e5f86e47df4ad9fa9d4c746f7f3afb33a1e9dcdee847d4da7",
+      "started_at": "2026-11-13T08:29:42.976702+00:00",
+      "finished_at": "2026-11-13T08:30:17.687466+00:00",
+      "duration_seconds": 34.711
+    },
+    {
+      "run_id": "9b3a2bdf-0282-49e5-b167-5b244d79d3e0",
+      "slug": "sgd-lr01-b64",
+      "hyperparams": {
+        "lr": 0.01,
+        "batch_size": 64,
+        "epochs": 2,
+        "optimizer": "sgd",
+        "momentum": 0.9,
+        "seed": 45
+      },
+      "best_val_accuracy": 0.9845,
+      "checkpoint_sha": "20d740600b06eb4c81056a582134675ce73d0324b0b0d2400ec2e2910683da08",
+      "started_at": "2026-11-13T08:30:17.726919+00:00",
+      "finished_at": "2026-11-13T08:30:56.855107+00:00",
+      "duration_seconds": 39.128
+    },
+    {
+      "run_id": "2cb95fd1-0fbe-4cab-ab65-c4ace0be7b83",
+      "slug": "adamw-lr0003-b512",
+      "hyperparams": {
+        "lr": 0.0003,
+        "batch_size": 512,
+        "epochs": 2,
+        "optimizer": "adamw",
+        "weight_decay": 0.01,
+        "seed": 46
+      },
+      "best_val_accuracy": 0.951667,
+      "checkpoint_sha": "ccfdfc3ca8161fef5c73e78726fe87cd0a124f50b6b0761227ee52364641b638",
+      "started_at": "2026-11-13T08:30:56.877909+00:00",
+      "finished_at": "2026-11-13T08:31:17.632834+00:00",
+      "duration_seconds": 20.755
+    }
+  ],
+  "best_run_id": "9b3a2bdf-0282-49e5-b167-5b244d79d3e0",
+  "best_checkpoint_sha": "20d740600b06eb4c81056a582134675ce73d0324b0b0d2400ec2e2910683da08",
+  "eval_run_id": "626d0627-b1cf-4eaf-9a64-5c1963b01bd3"
+}

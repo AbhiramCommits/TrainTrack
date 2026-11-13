@@ -1,0 +1,528 @@
+{
+  "generated_at": "2026-11-13T08:31:30.523554+00:00",
+  "generated_by": "scripts/export_results.py",
+  "build_git_sha": "ac7c435",
+  "experiment": {
+    "id": "e9b6af44-be65-4ba9-be8a-6228f98512cb",
+    "name": "mnist-sweep-v1",
+    "description": "MNIST CNN lr/batch-size sweep"
+  },
+  "environment": {
+    "platform": "macOS-27.2.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "python": "3.11.14",
+    "torch": "2.5.1",
+    "cuda_available": false,
+    "mps_available": true,
+    "devices_used": [
+      "mps"
+    ]
+  },
+  "dataset_snapshot": {
+    "id": "81e5788c-8d25-4903-96d5-1fd0287f5f6f",
+    "version": "mnist-v1",
+    "content_hash": "ec15555b070325cf62402d2c117c7327532b6c597a2bdf14251a28865250b2cb",
+    "row_count": 70000,
+    "validated": true,
+    "seed": 42,
+    "mean": 0.13065308332443237,
+    "std": 0.30810239911079407,
+    "splits": {
+      "val": {
+        "rows": 6000,
+        "dtype": "float32",
+        "shape": [
+          6000,
+          1,
+          28,
+          28
+        ],
+        "class_histogram": {
+          "0": 604,
+          "1": 675,
+          "2": 597,
+          "3": 644,
+          "4": 587,
+          "5": 508,
+          "6": 589,
+          "7": 608,
+          "8": 608,
+          "9": 580
+        }
+      },
+      "test": {
+        "rows": 10000,
+        "dtype": "float32",
+        "shape": [
+          10000,
+          1,
+          28,
+          28
+        ],
+        "class_histogram": {
+          "0": 980,
+          "1": 1135,
+          "2": 1032,
+          "3": 1010,
+          "4": 982,
+          "5": 892,
+          "6": 958,
+          "7": 1028,
+          "8": 974,
+          "9": 1009
+        }
+      },
+      "train": {
+        "rows": 54000,
+        "dtype": "float32",
+        "shape": [
+          54000,
+          1,
+          28,
+          28
+        ],
+        "class_histogram": {
+          "0": 5319,
+          "1": 6067,
+          "2": 5361,
+          "3": 5487,
+          "4": 5255,
+          "5": 4913,
+          "6": 5329,
+          "7": 5657,
+          "8": 5243,
+          "9": 5369
+        }
+      }
+    },
+    "class_histogram": {
+      "0": 5923,
+      "1": 6742,
+      "2": 5958,
+      "3": 6131,
+      "4": 5842,
+      "5": 5421,
+      "6": 5918,
+      "7": 6265,
+      "8": 5851,
+      "9": 5949
+    }
+  },
+  "runs": [
+    {
+      "run_id": "9b3a2bdf-0282-49e5-b167-5b244d79d3e0",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.01,
+        "seed": 45,
+        "epochs": 2,
+        "dropout": 0.0,
+        "momentum": 0.9,
+        "optimizer": "sgd",
+        "batch_size": 64,
+        "max_batches": null,
+        "weight_decay": 0.0,
+        "label_smoothing": 0.0
+      },
+      "git_sha": "ac7c435",
+      "requested_gpus": 1,
+      "val_accuracy": 0.9845,
+      "test_accuracy": 0.9851,
+      "test_macro_f1": 0.985011,
+      "inference_p50_ms": 0.027917,
+      "inference_p95_ms": 0.045201,
+      "epochs": 2,
+      "device": "mps",
+      "device_name": "Apple Silicon MPS",
+      "train_seconds": 29.907,
+      "wall_clock_seconds": 39.128,
+      "checkpoint_sha": "20d740600b06eb4c81056a582134675ce73d0324b0b0d2400ec2e2910683da08",
+      "attempt_count": 1,
+      "created_at": "2026-11-13T08:28:37.266495+00:00",
+      "started_at": "2026-11-13T08:30:17.726919+00:00",
+      "finished_at": "2026-11-13T08:30:56.855107+00:00",
+      "artifact_count": 4,
+      "artifact_bytes": 1666087
+    },
+    {
+      "run_id": "302871cc-7a06-4086-a1cc-d15f76ce0085",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.001,
+        "seed": 42,
+        "epochs": 2,
+        "dropout": 0.0,
+        "momentum": 0.0,
+        "optimizer": "adam",
+        "batch_size": 64,
+        "max_batches": null,
+        "weight_decay": 0.0,
+        "label_smoothing": 0.0
+      },
+      "git_sha": "ac7c435",
+      "requested_gpus": 1,
+      "val_accuracy": 0.983,
+      "test_accuracy": 0.9869,
+      "test_macro_f1": 0.98679,
+      "inference_p50_ms": 0.029031,
+      "inference_p95_ms": 0.06339,
+      "epochs": 2,
+      "device": "mps",
+      "device_name": "Apple Silicon MPS",
+      "train_seconds": 30.59,
+      "wall_clock_seconds": 40.703,
+      "checkpoint_sha": "27e24a99ad6516ec4b7ab67cdca8183cd0cc62c22967d9d9c44ad47396c3ac3f",
+      "attempt_count": 1,
+      "created_at": "2026-11-13T08:28:37.178217+00:00",
+      "started_at": "2026-11-13T08:28:37.217562+00:00",
+      "finished_at": "2026-11-13T08:29:17.920206+00:00",
+      "artifact_count": 4,
+      "artifact_bytes": 1666080
+    },
+    {
+      "run_id": "fc1e38b9-e74a-4963-affe-73df083351be",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.002,
+        "seed": 44,
+        "epochs": 2,
+        "dropout": 0.0,
+        "momentum": 0.0,
+        "optimizer": "adam",
+        "batch_size": 256,
+        "max_batches": null,
+        "weight_decay": 0.0,
+        "label_smoothing": 0.0
+      },
+      "git_sha": "ac7c435",
+      "requested_gpus": 1,
+      "val_accuracy": 0.982333,
+      "test_accuracy": 0.9822,
+      "test_macro_f1": 0.982146,
+      "inference_p50_ms": 0.054114,
+      "inference_p95_ms": 0.291664,
+      "epochs": 2,
+      "device": "mps",
+      "device_name": "Apple Silicon MPS",
+      "train_seconds": 24.358,
+      "wall_clock_seconds": 34.711,
+      "checkpoint_sha": "50cbd05ef7a7e33e5f86e47df4ad9fa9d4c746f7f3afb33a1e9dcdee847d4da7",
+      "attempt_count": 1,
+      "created_at": "2026-11-13T08:28:37.232438+00:00",
+      "started_at": "2026-11-13T08:29:42.976702+00:00",
+      "finished_at": "2026-11-13T08:30:17.687466+00:00",
+      "artifact_count": 4,
+      "artifact_bytes": 1666106
+    },
+    {
+      "run_id": "483e480d-e317-44c1-bb4c-ece457903a12",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.0005,
+        "seed": 43,
+        "epochs": 2,
+        "dropout": 0.1,
+        "momentum": 0.0,
+        "optimizer": "adam",
+        "batch_size": 128,
+        "max_batches": null,
+        "weight_decay": 0.0,
+        "label_smoothing": 0.0
+      },
+      "git_sha": "ac7c435",
+      "requested_gpus": 1,
+      "val_accuracy": 0.977,
+      "test_accuracy": 0.9828,
+      "test_macro_f1": 0.982728,
+      "inference_p50_ms": 0.023639,
+      "inference_p95_ms": 0.031502,
+      "epochs": 2,
+      "device": "mps",
+      "device_name": "Apple Silicon MPS",
+      "train_seconds": 20.43,
+      "wall_clock_seconds": 25.017,
+      "checkpoint_sha": "91c8b8260b4aeb532eb623915336b8aed212ac8442a1381dbd3840a195908ca8",
+      "attempt_count": 1,
+      "created_at": "2026-11-13T08:28:37.207875+00:00",
+      "started_at": "2026-11-13T08:29:17.937110+00:00",
+      "finished_at": "2026-11-13T08:29:42.953629+00:00",
+      "artifact_count": 4,
+      "artifact_bytes": 1666090
+    },
+    {
+      "run_id": "2cb95fd1-0fbe-4cab-ab65-c4ace0be7b83",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.0003,
+        "seed": 46,
+        "epochs": 2,
+        "dropout": 0.0,
+        "momentum": 0.0,
+        "optimizer": "adamw",
+        "batch_size": 512,
+        "max_batches": null,
+        "weight_decay": 0.01,
+        "label_smoothing": 0.0
+      },
+      "git_sha": "ac7c435",
+      "requested_gpus": 1,
+      "val_accuracy": 0.951667,
+      "test_accuracy": 0.9602,
+      "test_macro_f1": 0.959952,
+      "inference_p50_ms": 0.020673,
+      "inference_p95_ms": 0.073039,
+      "epochs": 2,
+      "device": "mps",
+      "device_name": "Apple Silicon MPS",
+      "train_seconds": 14.272,
+      "wall_clock_seconds": 20.755,
+      "checkpoint_sha": "ccfdfc3ca8161fef5c73e78726fe87cd0a124f50b6b0761227ee52364641b638",
+      "attempt_count": 1,
+      "created_at": "2026-11-13T08:28:37.301431+00:00",
+      "started_at": "2026-11-13T08:30:56.877909+00:00",
+      "finished_at": "2026-11-13T08:31:17.632834+00:00",
+      "artifact_count": 4,
+      "artifact_bytes": 1666126
+    }
+  ],
+  "completed_runs": 5,
+  "best_run": {
+    "run_id": "9b3a2bdf-0282-49e5-b167-5b244d79d3e0",
+    "val_accuracy": 0.9845,
+    "test_accuracy": 0.9851,
+    "checkpoint_sha": "20d740600b06eb4c81056a582134675ce73d0324b0b0d2400ec2e2910683da08"
+  },
+  "eval_on_best": {
+    "run_id": "626d0627-b1cf-4eaf-9a64-5c1963b01bd3",
+    "wall_clock_seconds": 3.574,
+    "checkpoint_sha": "20d740600b06eb4c81056a582134675ce73d0324b0b0d2400ec2e2910683da08",
+    "checkpoint_run_id": "9b3a2bdf-0282-49e5-b167-5b244d79d3e0",
+    "accuracy": 0.9851,
+    "macro_precision": 0.985297,
+    "macro_recall": 0.984859,
+    "macro_f1": 0.985011,
+    "test_loss": 0.046843457873910664,
+    "inference_p50_ms": 0.015795,
+    "inference_p95_ms": 0.032448,
+    "num_test_samples": 10000,
+    "batch_size": 512,
+    "device": "mps",
+    "per_class": {
+      "0": {
+        "precision": 0.982863,
+        "recall": 0.994898,
+        "f1": 0.988844,
+        "accuracy": 0.994898,
+        "support": 980
+      },
+      "1": {
+        "precision": 0.995587,
+        "recall": 0.993833,
+        "f1": 0.994709,
+        "accuracy": 0.993833,
+        "support": 1135
+      },
+      "2": {
+        "precision": 0.98827,
+        "recall": 0.979651,
+        "f1": 0.983942,
+        "accuracy": 0.979651,
+        "support": 1032
+      },
+      "3": {
+        "precision": 0.973761,
+        "recall": 0.992079,
+        "f1": 0.982835,
+        "accuracy": 0.992079,
+        "support": 1010
+      },
+      "4": {
+        "precision": 0.993821,
+        "recall": 0.982688,
+        "f1": 0.988223,
+        "accuracy": 0.982688,
+        "support": 982
+      },
+      "5": {
+        "precision": 0.994273,
+        "recall": 0.973094,
+        "f1": 0.983569,
+        "accuracy": 0.973094,
+        "support": 892
+      },
+      "6": {
+        "precision": 0.985447,
+        "recall": 0.989562,
+        "f1": 0.9875,
+        "accuracy": 0.989562,
+        "support": 958
+      },
+      "7": {
+        "precision": 0.962371,
+        "recall": 0.995136,
+        "f1": 0.978479,
+        "accuracy": 0.995136,
+        "support": 1028
+      },
+      "8": {
+        "precision": 0.991658,
+        "recall": 0.976386,
+        "f1": 0.983963,
+        "accuracy": 0.976386,
+        "support": 974
+      },
+      "9": {
+        "precision": 0.984925,
+        "recall": 0.971259,
+        "f1": 0.978044,
+        "accuracy": 0.971259,
+        "support": 1009
+      }
+    },
+    "confusion_matrix": [
+      [
+        975,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        1,
+        1,
+        0
+      ],
+      [
+        0,
+        1128,
+        2,
+        3,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        1011,
+        4,
+        1,
+        0,
+        0,
+        13,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        2,
+        1002,
+        0,
+        1,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        965,
+        0,
+        3,
+        2,
+        2,
+        9
+      ],
+      [
+        3,
+        0,
+        0,
+        8,
+        0,
+        868,
+        6,
+        3,
+        3,
+        1
+      ],
+      [
+        3,
+        2,
+        0,
+        1,
+        1,
+        2,
+        948,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        3,
+        0,
+        0,
+        0,
+        0,
+        1023,
+        0,
+        1
+      ],
+      [
+        5,
+        0,
+        4,
+        5,
+        1,
+        0,
+        0,
+        4,
+        951,
+        4
+      ],
+      [
+        2,
+        2,
+        0,
+        6,
+        3,
+        2,
+        0,
+        13,
+        1,
+        980
+      ]
+    ],
+    "eval_seconds": 0.407
+  },
+  "artifacts": {
+    "unique_artifacts": 21,
+    "stored_bytes": 8334175,
+    "attempted_bytes": 12488127,
+    "bytes_saved": 4153952,
+    "dedupe_savings_mb": 3.961517,
+    "dedupe_ratio": 0.332632,
+    "by_kind": {
+      "checkpoint": 10,
+      "eval_report": 6,
+      "train_summary": 5
+    },
+    "store_stats": {
+      "blob_count": 21,
+      "total_bytes": 8334175
+    }
+  },
+  "lineage": {
+    "best_checkpoint_sha": "20d740600b06eb4c81056a582134675ce73d0324b0b0d2400ec2e2910683da08",
+    "best_checkpoint_chain_length": 2,
+    "eval_report_parents_checkpoint": true
+  }
+}

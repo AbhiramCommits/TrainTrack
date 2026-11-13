@@ -304,6 +304,13 @@ class Worker:
             session.commit()
             run_id_value = run.id
             job = self._job_context(session, run, snapshot)
+            if run.requested_gpus and self.executor.name == "local":
+                append_log(
+                    run_id_value,
+                    f"[worker] run requested {run.requested_gpus} GPU(s); the local "
+                    "executor has no NVIDIA device, so training selects MPS/CPU",
+                    level="info",
+                )
             append_log(
                 run_id_value,
                 f"[worker] {self.worker_id} executing {run.job_kind} attempt {run.attempt_count}",

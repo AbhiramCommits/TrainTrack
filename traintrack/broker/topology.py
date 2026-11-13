@@ -7,18 +7,24 @@ main exchange with the ``run.submitted`` routing key.
 
 from __future__ import annotations
 
+import os
 from typing import Any
 
 import pika
 
-EXCHANGE = "traintrack"
-RUNS_SUBMITTED = "runs.submitted"
-RUNS_RETRY = "runs.retry"
-RUNS_DEAD = "runs.dead"
+# A prefix lets tests (and parallel dev stacks) isolate their queues. The
+# default is empty, so production queue names are exactly runs.submitted,
+# runs.retry and runs.dead as documented.
+_PREFIX = os.environ.get("TRAINTRACK_QUEUE_PREFIX", "")
 
-RK_SUBMITTED = "run.submitted"
-RK_RETRY = "run.retry"
-RK_DEAD = "run.dead"
+EXCHANGE = f"{_PREFIX}traintrack"
+RUNS_SUBMITTED = f"{_PREFIX}runs.submitted"
+RUNS_RETRY = f"{_PREFIX}runs.retry"
+RUNS_DEAD = f"{_PREFIX}runs.dead"
+
+RK_SUBMITTED = f"{_PREFIX}run.submitted"
+RK_RETRY = f"{_PREFIX}run.retry"
+RK_DEAD = f"{_PREFIX}run.dead"
 
 
 def declare_topology(channel: Any) -> None:

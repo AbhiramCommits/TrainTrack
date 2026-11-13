@@ -11,6 +11,7 @@ import uuid
 import pytest
 from sqlalchemy import func, select
 from traintrack.broker.publisher import get_publisher, queue_stats
+from traintrack.broker.topology import RUNS_DEAD
 from traintrack.db import get_session
 from traintrack.models.base import utcnow
 from traintrack.models.run import Run, StatusTransition
@@ -154,7 +155,7 @@ def test_failing_job_retries_then_lands_in_dlq(
         _wait_for(failed, timeout=90, interval=0.5)
         time.sleep(1.0)  # allow the DLQ publish to settle
         stats = queue_stats()
-        assert stats["runs.dead"] >= 1
+        assert stats[RUNS_DEAD] >= 1
 
         session = get_session()
         try:
