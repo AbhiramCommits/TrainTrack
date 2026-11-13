@@ -56,6 +56,8 @@ def run_to_dict(
         "failure_reason": run.failure_reason,
         "executor": run.executor,
         "worker_id": run.worker_id,
+        "pod_name": run.pod_name,
+        "scheduling_latency_seconds": run.scheduling_latency_seconds,
         "created_at": iso(run.created_at),
         "scheduled_at": iso(run.scheduled_at),
         "started_at": iso(run.started_at),

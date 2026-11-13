@@ -37,6 +37,7 @@ def compute_leaderboard(session: Session, experiment_id: uuid.UUID) -> list[dict
             .join(Run, Run.id == MetricPoint.run_id)
             .where(
                 Run.experiment_id == experiment_id,
+                Run.job_kind == "train",
                 MetricPoint.name == metric_name,
             )
             .group_by(MetricPoint.run_id)
