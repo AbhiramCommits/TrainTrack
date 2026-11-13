@@ -257,6 +257,31 @@ def test_worker_recovers_orphaned_running_run(
 
         _wait_for(terminal, timeout=60, interval=0.5)
         assert _statuses([run_id])[run_id] is RunStatus.SUCCEEDED
+
+        session = get_session()
+        try:
+            transitions = list(
+                session.execute(
+                    select(StatusTransition)
+                    .where(StatusTransition.run_id == run_id)
+                    .order_by(StatusTransition.id)
+                ).scalars()
+            )
+            lost = [
+                transition
+                for transition in transitions
+                if transition.from_status == "RUNNING"
+                and transition.to_status == "FAILED"
+            ]
+            assert lost, [t.to_status for t in transitions]
+            assert "worker lost ownership" in (lost[0].reason or "")
+            assert any(
+                transition.from_status == "FAILED"
+                and transition.to_status == "QUEUED"
+                for transition in transitions
+            )
+        finally:
+            session.close()
     finally:
         worker.request_stop()
         thread.join(timeout=5)

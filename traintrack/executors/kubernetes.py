@@ -102,6 +102,8 @@ def render_job_manifest(
             "--run-id",
             str(job.run_id),
         ]
+    elif job.job_kind == "noop":
+        command = ["python", "-c", "print('noop job completed')"]
     else:
         raise ValueError(f"KubernetesExecutor cannot run job kind {job.job_kind!r}")
 

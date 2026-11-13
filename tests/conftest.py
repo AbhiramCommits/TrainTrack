@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import os
+import threading
 import uuid
 from collections.abc import Iterator
 
 import pytest
+from werkzeug.serving import make_server
 
 TEST_DATABASE_URL = os.environ.get(
     "TEST_DATABASE_URL",
@@ -153,3 +155,22 @@ def experiment(client, auth_headers) -> dict:
 def idempotency_headers(auth_headers) -> dict[str, str]:
     """Auth headers with a fresh idempotency key."""
     return {**auth_headers, "Idempotency-Key": uuid.uuid4().hex}
+
+
+@pytest.fixture()
+def live_api_url(app, monkeypatch) -> Iterator[str]:
+    """Serve the real Flask app on a random port for training subprocesses."""
+    server = make_server("127.0.0.1", 0, app, threaded=True)
+    port = server.server_port
+    url = f"http://127.0.0.1:{port}"
+    monkeypatch.setenv("TRAINTRACK_API_URL", url)
+    reset_settings_cache()
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield url
+    finally:
+        server.shutdown()
+        thread.join(timeout=5)
+        monkeypatch.delenv("TRAINTRACK_API_URL", raising=False)
+        reset_settings_cache()

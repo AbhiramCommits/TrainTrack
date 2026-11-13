@@ -173,7 +173,13 @@ class Worker:
                 )
                 logger.info("worker %s consuming %s", self.worker_id, RUNS_SUBMITTED)
                 self._channel.start_consuming()
-                break
+                if self._stopping.is_set():
+                    break
+                # A closed/lost connection can make start_consuming return
+                # without raising; treat it as a disconnect and reconnect.
+                logger.warning("consumer stopped unexpectedly; reconnecting")
+                self._close()
+                time.sleep(2)
             except (pika.exceptions.AMQPError, OSError) as exc:
                 self._close()
                 if self._stopping.is_set():

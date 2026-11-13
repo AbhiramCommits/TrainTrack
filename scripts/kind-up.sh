@@ -110,8 +110,12 @@ kubectl -n "$NAMESPACE" rollout status deployment/traintrack-api --timeout=300s
 kubectl -n "$NAMESPACE" rollout status deployment/traintrack-worker --timeout=300s
 
 echo "==> Validating the GPU request manifest with a server-side dry run"
-"$PYTHON" "$ROOT/scripts/render_gpu_manifest.py" --output /tmp/traintrack-gpu-job.yaml
-kubectl apply --dry-run=server -f /tmp/traintrack-gpu-job.yaml
+if [[ "${TRAINTRACK_SKIP_GPU_DRYRUN:-0}" != "1" ]]; then
+  "$PYTHON" "$ROOT/scripts/render_gpu_manifest.py" --output /tmp/traintrack-gpu-job.yaml
+  kubectl apply --dry-run=server -f /tmp/traintrack-gpu-job.yaml
+else
+  echo "skipped (TRAINTRACK_SKIP_GPU_DRYRUN=1)"
+fi
 
 echo
 echo "TrainTrack is running on kind."
