@@ -19,6 +19,7 @@ from traintrack.api.runs import bp as runs_bp
 from traintrack.api.snapshots import bp as snapshots_bp
 from traintrack.config import settings
 from traintrack.db import get_session, init_db
+from traintrack.metrics.api import bp as metrics_bp
 from traintrack.models.api_key import ApiKey
 from traintrack.services.auth import create_api_key, hash_api_key
 
@@ -79,6 +80,7 @@ def create_app(config: dict[str, Any] | None = None) -> Flask:
     app.register_blueprint(artifacts_bp)
     app.register_blueprint(snapshots_bp)
     app.register_blueprint(queue_bp)
+    app.register_blueprint(metrics_bp)
 
     @app.before_request
     def _cors_preflight():

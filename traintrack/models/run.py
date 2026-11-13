@@ -11,6 +11,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     Enum,
+    Float,
     ForeignKey,
     Index,
     Integer,
@@ -92,6 +93,10 @@ class Run(Base, CreatedAtMixin, UpdatedAtMixin):
     worker_id: Mapped[str | None] = mapped_column(String(100), nullable=True)
     cancel_requested: Mapped[bool] = mapped_column(
         Boolean, nullable=False, default=False
+    )
+    pod_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    scheduling_latency_seconds: Mapped[float | None] = mapped_column(
+        Float, nullable=True
     )
     started_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True

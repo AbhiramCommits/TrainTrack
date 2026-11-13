@@ -119,13 +119,30 @@ class Worker:
             self._connect()
 
     # ---- connection management -------------------------------------------------
-    def _connect(self) -> None:
+    def _connect(self, attempts: int = 60, delay: float = 2.0) -> None:
+        """Connect to RabbitMQ, waiting for a broker that is still starting."""
         config = settings()
         parameters = pika.URLParameters(config.amqp_url)
         parameters.heartbeat = 30
         parameters.blocked_connection_timeout = 30
         parameters.socket_timeout = 30
-        self._connection = pika.BlockingConnection(parameters)
+        last_error: Exception | None = None
+        for attempt in range(1, attempts + 1):
+            if self._stopping.is_set():
+                raise pika.exceptions.AMQPConnectionError("worker stopping")
+            try:
+                self._connection = pika.BlockingConnection(parameters)
+                break
+            except (pika.exceptions.AMQPError, OSError) as exc:
+                last_error = exc
+                logger.warning(
+                    "RabbitMQ connect attempt %s/%s failed: %s", attempt, attempts, exc
+                )
+                time.sleep(delay)
+        if self._connection is None or not self._connection.is_open:
+            raise pika.exceptions.AMQPConnectionError(
+                f"could not connect to RabbitMQ: {last_error}"
+            )
         self._channel = self._connection.channel()
         declare_topology(self._channel)
         self._channel.basic_qos(prefetch_count=self.prefetch)
@@ -144,17 +161,26 @@ class Worker:
     # ---- lifecycle -------------------------------------------------------------
     def start_consuming(self) -> None:
         """Block consuming messages until :meth:`request_stop` is called."""
-        assert self._channel is not None
-        self._channel.basic_consume(
-            queue=RUNS_SUBMITTED,
-            on_message_callback=self._on_message,
-            auto_ack=False,
-        )
-        logger.info("worker %s consuming %s", self.worker_id, RUNS_SUBMITTED)
-        try:
-            self._channel.start_consuming()
-        finally:
-            self._close()
+        while not self._stopping.is_set():
+            try:
+                if self._connection is None or not self._connection.is_open:
+                    self._connect()
+                assert self._channel is not None
+                self._channel.basic_consume(
+                    queue=RUNS_SUBMITTED,
+                    on_message_callback=self._on_message,
+                    auto_ack=False,
+                )
+                logger.info("worker %s consuming %s", self.worker_id, RUNS_SUBMITTED)
+                self._channel.start_consuming()
+                break
+            except (pika.exceptions.AMQPError, OSError) as exc:
+                self._close()
+                if self._stopping.is_set():
+                    break
+                logger.warning("RabbitMQ connection lost (%s); reconnecting", exc)
+                time.sleep(2)
+        self._close()
 
     def run_in_thread(self) -> threading.Thread:
         """Start the consumer on a background thread (used by tests)."""

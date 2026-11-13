@@ -1,0 +1,139 @@
+{
+  "generated_at": "2026-11-13T01:20:51.259549-08:00",
+  "generated_by": "scripts/export_k8s_results.py",
+  "cluster": "traintrack",
+  "experiment": {
+    "created_at": "2026-11-13T09:16:02.528327+00:00",
+    "description": "kind Kubernetes executor check",
+    "id": "0c638505-3f69-4457-b23f-100bfbafb83a",
+    "name": "k8s-kind-check"
+  },
+  "snapshot": {
+    "id": "41fd4007-d50e-4751-b36e-5691a457cd55",
+    "version": "mnist-v1",
+    "content_hash": "ec15555b070325cf62402d2c117c7327532b6c597a2bdf14251a28865250b2cb",
+    "row_count": 70000
+  },
+  "gpu_manifest_dry_run": {
+    "command": "kubectl apply --dry-run=server -f /tmp/traintrack-gpu-job.yaml",
+    "returncode": 0,
+    "stdout": "job.batch/traintrack-run-11111111-1111-4111-8111-111111111111 created (server dry run)",
+    "stderr": "",
+    "validated": true,
+    "manifest": "/tmp/traintrack-gpu-job.yaml"
+  },
+  "nodes": {
+    "nodes": [
+      {
+        "name": "traintrack-control-plane",
+        "kubernetes_version": "v1.37.0",
+        "cpu": "8",
+        "memory": "8124776Ki",
+        "os": "Debian GNU/Linux 13 (trixie)",
+        "container_runtime": "containerd://2.3.4"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "e2829cb4-974a-4841-ac82-420ed9f03a7c",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.001,
+        "seed": 42,
+        "epochs": 1,
+        "dropout": 0.0,
+        "momentum": 0.0,
+        "optimizer": "adam",
+        "batch_size": 128,
+        "max_batches": null,
+        "weight_decay": 0.0,
+        "label_smoothing": 0.0
+      },
+      "requested_gpus": 0,
+      "executor": "kubernetes",
+      "pod_name": "traintrack-run-e2829cb4-974a-4841-ac82-420ed9f03a7c-mwzkx",
+      "attempt_count": 1,
+      "created_at": "2026-11-13 09:16:04.731555+00",
+      "scheduled_at": "2026-11-13 09:16:05.185366+00",
+      "started_at": "2026-11-13 09:16:05.298449+00",
+      "finished_at": "2026-11-13 09:18:59.341548+00",
+      "scheduling_latency_seconds": 1.958,
+      "val_accuracy": 0.974167,
+      "test_accuracy": 0.9797,
+      "artifact_count": 3,
+      "queue_wait_seconds": 0.454,
+      "pod_execution_seconds": 174.043,
+      "end_to_end_seconds": 174.61
+    },
+    {
+      "run_id": "d2ee183e-5b64-4000-a948-69c4f5194acd",
+      "status": "SUCCEEDED",
+      "hyperparams": {
+        "lr": 0.002,
+        "seed": 43,
+        "epochs": 1,
+        "dropout": 0.0,
+        "momentum": 0.0,
+        "optimizer": "adam",
+        "batch_size": 256,
+        "max_batches": null,
+        "weight_decay": 0.0,
+        "label_smoothing": 0.0
+      },
+      "requested_gpus": 0,
+      "executor": "kubernetes",
+      "pod_name": "traintrack-run-d2ee183e-5b64-4000-a948-69c4f5194acd-k9hj6",
+      "attempt_count": 1,
+      "created_at": "2026-11-13 09:16:05.056711+00",
+      "scheduled_at": "2026-11-13 09:19:02.033489+00",
+      "started_at": "2026-11-13 09:19:02.041686+00",
+      "finished_at": "2026-11-13 09:20:46.738271+00",
+      "scheduling_latency_seconds": 178.078,
+      "val_accuracy": 0.9685,
+      "test_accuracy": 0.9745,
+      "artifact_count": 3,
+      "queue_wait_seconds": 176.977,
+      "pod_execution_seconds": 104.697,
+      "end_to_end_seconds": 281.682
+    }
+  ],
+  "summary": {
+    "run_count": 2,
+    "succeeded": 2,
+    "scheduling_latency_seconds": {
+      "min": 1.958,
+      "median": 90.018,
+      "max": 178.078
+    },
+    "end_to_end_seconds": {
+      "min": 174.61,
+      "median": 228.146,
+      "max": 281.682
+    },
+    "executors": [
+      "kubernetes"
+    ],
+    "pods": [
+      "traintrack-run-d2ee183e-5b64-4000-a948-69c4f5194acd-k9hj6",
+      "traintrack-run-e2829cb4-974a-4841-ac82-420ed9f03a7c-mwzkx"
+    ]
+  },
+  "prometheus": {
+    "reachable": true,
+    "target_up": 1.0,
+    "queue_depth_sample": [
+      {
+        "metric": {
+          "__name__": "traintrack_queue_depth",
+          "instance": "host.docker.internal:8010",
+          "job": "traintrack-api"
+        },
+        "value": [
+          1794561651.355,
+          "0"
+        ]
+      }
+    ]
+  }
+}

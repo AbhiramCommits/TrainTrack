@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traintrack-worker
+  namespace: traintrack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traintrack-worker
+  template:
+    metadata:
+      labels:
+        app: traintrack-worker
+    spec:
+      serviceAccountName: traintrack-worker
+      containers:
+        - name: worker
+          image: traintrack:dev
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "traintrack.worker"]
+          envFrom:
+            - configMapRef:
+                name: traintrack-config
+            - secretRef:
+                name: traintrack-secrets
+          resources:
+            requests: { cpu: "100m", memory: 256Mi }
+            limits: { cpu: "1", memory: 1Gi }
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: artifacts
+              mountPath: /artifacts
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
+        - name: artifacts
+          hostPath:
+            path: /artifacts
+            type: DirectoryOrCreate

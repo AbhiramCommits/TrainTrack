@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traintrack-api
+  namespace: traintrack
+spec:
+  selector:
+    app: traintrack-api
+  ports:
+    - name: http
+      port: 8010
+      targetPort: 8010
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traintrack-api
+  namespace: traintrack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traintrack-api
+  template:
+    metadata:
+      labels:
+        app: traintrack-api
+    spec:
+      containers:
+        - name: api
+          image: traintrack:dev
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-m", "traintrack.api"]
+          envFrom:
+            - configMapRef:
+                name: traintrack-config
+            - secretRef:
+                name: traintrack-secrets
+          ports:
+            - containerPort: 8010
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8010
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8010
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "250m", memory: 512Mi }
+            limits: { cpu: "2", memory: 2Gi }
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: artifacts
+              mountPath: /artifacts
+      volumes:
+        - name: data
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
+        - name: artifacts
+          hostPath:
+            path: /artifacts
+            type: DirectoryOrCreate

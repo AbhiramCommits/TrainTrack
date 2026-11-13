@@ -20,6 +20,7 @@ dependencies = [
     "prometheus-client==0.21.1",
     "kubernetes==31.0.0",
     "Jinja2==3.1.4",
+    "PyYAML==6.0.2",
     "requests==2.32.3",
     "python-dotenv==1.0.1",
     "gunicorn==23.0.0",
@@ -38,6 +39,7 @@ dev = [
     "pre-commit==4.0.1",
     "types-requests==2.32.0.20241016",
     "types-psutil==6.1.0.20241102",
+    "types-PyYAML==6.0.12.20240917",
 ]
 
 [tool.setuptools.packages.find]

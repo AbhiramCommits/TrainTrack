@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traintrack-worker
+  namespace: traintrack
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: traintrack-job
+  namespace: traintrack
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: traintrack-worker
+  namespace: traintrack
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["create", "get", "list", "watch", "delete"]
+  - apiGroups: ["batch"]
+    resources: ["jobs/status"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods/log"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: traintrack-worker
+  namespace: traintrack
+subjects:
+  - kind: ServiceAccount
+    name: traintrack-worker
+    namespace: traintrack
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: traintrack-worker

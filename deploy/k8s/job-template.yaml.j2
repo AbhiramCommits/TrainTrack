@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ job_name }}
+  namespace: {{ namespace }}
+  labels:
+    traintrack.run-id: {{ run_id }}
+    traintrack.experiment-id: {{ experiment_id }}
+    app.kubernetes.io/name: traintrack-job
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: {{ ttl_seconds }}
+  activeDeadlineSeconds: {{ active_deadline_seconds }}
+  template:
+    metadata:
+      labels:
+        traintrack.run-id: {{ run_id }}
+        traintrack.experiment-id: {{ experiment_id }}
+        app.kubernetes.io/name: traintrack-job
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ service_account }}
+      containers:
+        - name: job
+          image: {{ image }}
+          imagePullPolicy: {{ image_pull_policy }}
+          command:
+{% for arg in command %}
+            - {{ arg | tojson }}
+{% endfor %}
+          env:
+{% for item in env %}
+            - name: {{ item.name }}
+              value: {{ item.value | tojson }}
+{% endfor %}
+          resources:
+            requests:
+              cpu: {{ cpu_request | tojson }}
+              memory: {{ memory_request | tojson }}
+            limits:
+              cpu: {{ cpu_limit | tojson }}
+              memory: {{ memory_limit | tojson }}
+{% if gpus > 0 %}
+              nvidia.com/gpu: {{ gpus }}
+{% endif %}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: artifacts
+              mountPath: /artifacts
+      volumes:
+        - name: data
+          hostPath:
+            path: {{ data_host_path | tojson }}
+            type: DirectoryOrCreate
+        - name: artifacts
+          hostPath:
+            path: {{ artifacts_host_path | tojson }}
+            type: DirectoryOrCreate
+{% if gpus > 0 %}
+      nodeSelector:
+        {{ gpu_node_selector_key | tojson }}: {{ gpu_node_selector_value | tojson }}
+      tolerations:
+        - key: {{ gpu_toleration_key | tojson }}
+          operator: Exists
+          effect: NoSchedule
+{% endif %}

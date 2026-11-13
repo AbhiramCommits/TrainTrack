@@ -83,7 +83,7 @@ services:
     volumes:
       - ./deploy/monitoring/grafana-datasource.yml:/etc/grafana/provisioning/datasources/prometheus.yml:ro
       - ./deploy/monitoring/grafana-dashboard.yml:/etc/grafana/provisioning/dashboards/traintrack.yml:ro
-      - ./deploy/monitoring/traintrack-dashboard.json:/var/lib/grafana/dashboards/traintrack.json:ro
+      - ./deploy/monitoring/dashboards:/var/lib/grafana/dashboards:ro
       - grafanadata:/var/lib/grafana
     healthcheck:
       test: ["CMD-SHELL", "wget -q --spider http://localhost:3000/api/health || exit 1"]
