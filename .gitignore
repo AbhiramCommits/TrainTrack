@@ -17,8 +17,10 @@ coverage.xml
 # Data and artifacts (content is reproducible; manifests are committed via results)
 data/raw/
 data/snapshots/
-artifacts/
-!artifacts/.gitkeep
+# Anchored to the repo root: an unanchored "artifacts/" also matched the
+# traintrack/artifacts/ Python package, so it was never committed.
+/artifacts/*
+!/artifacts/.gitkeep
 *.pt
 *.pth
 checkpoints/
